@@ -56,7 +56,8 @@ INSERT INTO sales_unnormalized VALUES
 SELECT * FROM sales_unnormalized;
 ```
 
-📸 **Сделайте скриншот** результата `SELECT *`.
+<img width="940" height="838" alt="image" src="https://github.com/user-attachments/assets/8a289896-c6fa-4978-b324-c961aadc7107" />
+
 
 💾 **Сделайте ПЕРВЫЙ дамп** (выйдите из MySQL командой `exit` и выполните в Git-Bash):
 ```bash
@@ -77,6 +78,7 @@ UPDATE sales_unnormalized SET unit_price = 16000.00 WHERE product_id = 201 AND s
 -- Если бы мы не указали sale_id, обновились бы все строки, но риск ошибки велик.
 SELECT * FROM sales_unnormalized WHERE product_id = 201;
 ```
+<img width="898" height="202" alt="image" src="https://github.com/user-attachments/assets/ee8d95b9-406f-4668-bf34-e903ca601261" />
 
 **2. Аномалия вставки (Insert):**
 Мы не можем добавить нового клиента, если он еще ничего не купил (так как `sale_id` и `product_id` фактически являются частью ключа).
@@ -85,6 +87,7 @@ SELECT * FROM sales_unnormalized WHERE product_id = 201;
 INSERT INTO sales_unnormalized (sale_id, client_id, client_name, client_city) 
 VALUES (NULL, 104, 'Новиков Петр', 'Сочи');
 ```
+<img width="700" height="69" alt="image" src="https://github.com/user-attachments/assets/6a137c27-53f6-43bf-aa81-44b3b56b1d48" />
 
 **3. Аномалия удаления (Delete):**
 Если клиент вернул все товары и мы удалим его продажи, мы потеряем информацию о самом клиенте!
@@ -94,8 +97,7 @@ DELETE FROM sales_unnormalized WHERE client_id = 102;
 -- Проверяем: Петровой больше нет в базе, хотя она наш клиент!
 SELECT * FROM sales_unnormalized WHERE client_id = 102;
 ```
-
-📸 **Сделайте скриншоты** этих аномалий.
+<img width="556" height="108" alt="image" src="https://github.com/user-attachments/assets/e4a63a08-1e69-493c-8130-0b982e4def4c" />
 
 ---
 
@@ -132,6 +134,7 @@ CREATE TABLE sale_items (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 ```
+<img width="700" height="600" alt="image" src="https://github.com/user-attachments/assets/606d73ac-5fb2-4099-825e-03d0c468f633" />
 
 ---
 
@@ -152,6 +155,7 @@ SELECT DISTINCT sale_id, sale_date, client_id
 FROM sales_unnormalized 
 WHERE sale_id IS NOT NULL;
 
+
 -- 3. Переносим сами продажи (шапки)
 INSERT INTO sales (sale_id, sale_date, client_id)
 SELECT DISTINCT sale_id, sale_date, client_id 
@@ -166,6 +170,13 @@ FROM sales_unnormalized
 WHERE sale_id IS NOT NULL 
   AND product_id IS NOT NULL;
 ```
+1. <img width="628" height="86" alt="image" src="https://github.com/user-attachments/assets/8b0bc423-b6df-42ed-964c-4fb4ccffd281" />
+
+2. <img width="455" height="125" alt="image" src="https://github.com/user-attachments/assets/ba427a13-3408-467b-80df-7b1c0d3fce93" />
+
+3. <img width="446" height="121" alt="image" src="https://github.com/user-attachments/assets/7e0a69f6-19a7-4cb7-82ed-58f53a49189c" />
+
+4. <img width="521" height="134" alt="image" src="https://github.com/user-attachments/assets/283e0d5b-ef0d-4bec-b1bd-d9d716e8f570" />
 
 ---
 
