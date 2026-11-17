@@ -140,21 +140,31 @@ CREATE TABLE sale_items (
 Используем `DISTINCT`, чтобы убрать дубликаты при переносе.
 
 ```sql
--- 1. Переносим клиентов
+-- Для клиентов
 INSERT INTO clients (client_id, client_name, client_city)
-SELECT DISTINCT client_id, client_name, client_city FROM sales_unnormalized;
+SELECT DISTINCT client_id, client_name, client_city 
+FROM sales_unnormalized 
+WHERE client_id IS NOT NULL;
 
--- 2. Переносим товары
-INSERT INTO products (product_id, product_name, unit_price)
-SELECT DISTINCT product_id, product_name, unit_price FROM sales_unnormalized;
+-- Для продаж (шапок)
+INSERT INTO sales (sale_id, sale_date, client_id)
+SELECT DISTINCT sale_id, sale_date, client_id 
+FROM sales_unnormalized 
+WHERE sale_id IS NOT NULL;
 
 -- 3. Переносим сами продажи (шапки)
 INSERT INTO sales (sale_id, sale_date, client_id)
-SELECT DISTINCT sale_id, sale_date, client_id FROM sales_unnormalized;
-
+SELECT DISTINCT sale_id, sale_date, client_id 
+FROM sales_unnormalized 
+WHERE sale_id IS NOT NULL 
+  AND client_id IS NOT NULL;
+  
 -- 4. Переносим позиции продаж (детализацию)
 INSERT INTO sale_items (sale_id, product_id, quantity)
-SELECT sale_id, product_id, quantity FROM sales_unnormalized;
+SELECT sale_id, product_id, quantity 
+FROM sales_unnormalized 
+WHERE sale_id IS NOT NULL 
+  AND product_id IS NOT NULL;
 ```
 
 ---
